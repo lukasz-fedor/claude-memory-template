@@ -36,6 +36,10 @@ Claude maintains session notes in `local/session-notes/YYYY-MM-DD.md`:
 - what to do next
 ```
 
+## Backlog
+
+`local/backlog.md` tracks tasks between sessions. Update after completing tasks — check off done items, add new ones discovered during work.
+
 ## Handover
 
 The PreCompact hook (`.claude/hooks/pre-compact-handover.py`) automatically generates

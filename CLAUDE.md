@@ -16,6 +16,7 @@
 At the start of a session, read:
 - `local/session-notes/HANDOVER-latest.md`
 - `local/session-notes/` (latest date file)
+- `local/backlog.md`
 Summarize context and ask the user whether to continue.
 For quick questions — skip and work directly.
 
