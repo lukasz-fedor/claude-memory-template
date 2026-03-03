@@ -1,0 +1,14 @@
+# Environment and secrets
+.env
+.env.*
+.mcp.json
+
+# Local working directory (session notes, cached data, tools)
+local/
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
