@@ -37,9 +37,10 @@ your-project/
 ├── memory/                      # Example (Claude creates this automatically)
 │   ├── MEMORY.md                #   topic index
 │   └── example-topic.md         #   notes per topic
-├── local/                       # Your working notes (gitignored)
-│   ├── backlog.md               #   task tracking between sessions
+├── local/                       # Working notes templates (gitignored after setup)
+│   ├── backlog-TEMPLATE.md      #   rename to backlog.md — task tracking
 │   └── session-notes/           #   daily notes + auto-generated handovers
+│       └── TEMPLATE.md          #   rename to README.md — session note format
 ├── .claudeignore                # What Claude skips at startup
 └── .gitignore                   # Keeps local/ and .env out of git
 ```
