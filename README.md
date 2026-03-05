@@ -62,7 +62,23 @@ Claude Code creates `MEMORY.md` on its own. You can also create **topic files** 
 **What to save:** Stable patterns, architectural decisions, user preferences, recurring solutions.
 **What NOT to save:** Session-specific context, unverified conclusions, anything that duplicates CLAUDE.md.
 
-### 4. Session continuity
+### 4. Skills
+
+Skills are specialized "modes" for Claude Code. Each skill gives Claude domain expertise, workflows, and guardrails for a specific type of task (e.g., code review, copywriting, SEO audit, deployment).
+
+**Skill structure:**
+```
+.claude/skills/your-skill/
+├── SKILL.md               ← main instructions (loaded when skill is invoked)
+├── LEARNED.md             ← patterns discovered during real usage
+└── references/            ← domain knowledge files (loaded on demand)
+```
+
+The template includes an annotated `example-skill/` — copy it and adapt to your needs. Skills are configured in your project's `.claude/settings.json` or invoked via slash commands.
+
+**How skills improve over time:** Claude updates `LEARNED.md` proactively after solving non-trivial problems. Next time the skill runs, Claude reads those patterns first — so skills get better with each session.
+
+### 5. Session continuity
 
 The **PreCompact hook** solves Claude Code's biggest limitation: context loss.
 
@@ -75,7 +91,7 @@ Next session, Claude reads the handover and picks up where it left off.
 
 **Setup:** The hook is configured in `.claude/settings.json` and runs automatically.
 
-### 5. .claudeignore
+### 6. .claudeignore
 
 Controls what Claude Code auto-loads at session start. Does **not** block search tools (Glob, Grep) — those can still scan ignored directories unless you pass the `path` parameter explicitly.
 
@@ -84,8 +100,9 @@ Controls what Claude Code auto-loads at session start. Does **not** block search
 1. Copy this template into your project root
 2. Edit `CLAUDE.md` — replace placeholders with your project info
 3. Edit `.claude/rules/` — adapt rules to your tech stack
-4. Verify `.claude/settings.json` has the PreCompact hook
-5. Start a Claude Code session — the system works automatically
+4. Copy `.claude/skills/example-skill/` and adapt to your domain
+5. Verify `.claude/settings.json` has the PreCompact hook
+6. Start a Claude Code session — the system works automatically
 
 ```bash
 # Copy template files (local/session-notes/ is included with TEMPLATE.md)
@@ -109,6 +126,11 @@ your-project/
 │   │   ├── architecture.md            # Loads for src/** edits
 │   │   ├── workflow.md                # Loads for docs/**, scripts/**
 │   │   └── session-protocol.md        # Loads for local/** edits
+│   ├── skills/
+│   │   └── example-skill/             # Example skill (replace with your own)
+│   │       ├── SKILL.md               # Skill instructions (loaded on invoke)
+│   │       ├── LEARNED.md             # Patterns discovered during usage
+│   │       └── references/            # Domain knowledge files
 │   └── hooks/
 │       └── pre-compact-handover.py    # Auto-generates handover on compact
 ├── local/                             # Gitignored — local working data

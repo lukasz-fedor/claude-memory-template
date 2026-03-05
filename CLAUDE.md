@@ -65,16 +65,34 @@ For quick questions — skip and work directly.
 <!--
   Claude Code auto-manages MEMORY.md at ~/.claude/projects/<hash>/memory/
   These rules tell Claude HOW to use it. See memory/README.md for structure.
+  Based on best practices from the Claude Code community.
 -->
-Proactively save useful discoveries to memory — architectural decisions, bug fixes, gotchas, environment quirks. Write them as they happen, not at session end.
+When you discover something valuable for future sessions — architectural decisions, bug fixes, gotchas, environment quirks — immediately write it to memory. Don't wait to be asked. Don't wait for session end.
 
-**Entry format:** brief and actionable. Include what happened and why it matters.
+**Entry format:** `YYYY-MM-DD: what happened — why it matters`
+
+**Structure:**
+```
+~/.claude/projects/<hash>/memory/
+├── MEMORY.md              ← index of all memory files (always loaded)
+├── general.md             ← cross-project facts, preferences, environment
+├── domain/{topic}.md      ← domain-specific knowledge (one file per topic)
+└── tools/{tool}.md        ← tool configs, CLI patterns, workarounds
+```
+
+**Rules:**
+1. Write to the right file immediately when you learn something worth remembering
+2. Keep MEMORY.md as a current index with one-line descriptions of each file
+3. If a file doesn't exist yet, create it
+4. Load topic files only when relevant — don't read everything at session start
 
 **When user says "clean up memory":**
-1. Audit all memory files for outdated or duplicate entries
-2. Consolidate related notes, split overgrown files
-3. Rebuild the MEMORY.md index
-4. Report what changed
+1. Read all memory files
+2. Remove duplicates and outdated entries
+3. Merge entries that belong together, split files that cover too many topics
+4. Re-sort entries by date within each file
+5. Update MEMORY.md index
+6. Report what changed
 
 ## Productivity Tips
 

@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.0] - 2026-03-05
+
+### Added
+- `.claude/skills/example-skill/` — annotated skill template with SKILL.md, LEARNED.md, and references/
+- Skills section in README explaining skill structure and self-learning
+
 ## [1.0.0] - 2026-03-03
 
 ### Added
