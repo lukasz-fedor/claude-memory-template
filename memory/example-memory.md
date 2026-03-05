@@ -16,5 +16,4 @@
 - 2025-01-11: Node 20 LTS via .nvmrc
 
 ## Topic Files
-- `memory/debugging.md` — build issues, deployment gotchas
-- `memory/patterns.md` — component architecture decisions
+- `memory/example-topic.md` — detailed notes on a specific domain area

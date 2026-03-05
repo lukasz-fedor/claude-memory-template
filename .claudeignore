@@ -8,16 +8,13 @@
 # Dependencies
 node_modules/
 
-# Build output
+# Build output (add your framework's build dir here)
 dist/
 build/
-.next/
-.astro/
 
-# Binary assets (images, fonts)
-public/img/
-public/fonts/
-public/assets/
+# Binary assets (add your project's asset dirs here)
+# public/img/
+# public/fonts/
 
 # Large generated files
 package-lock.json
@@ -28,5 +25,5 @@ pnpm-lock.yaml
 # local/tools/
 # local/scripts/
 
-# Blog/content that's too large to auto-load
+# Large content dirs that waste context (uncomment and adapt)
 # src/content/blog/

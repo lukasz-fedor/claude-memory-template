@@ -55,11 +55,18 @@ cp claude-memory-template/.claudeignore your-project/.claudeignore
 cat claude-memory-template/.gitignore >> your-project/.gitignore
 ```
 
-**2. Edit `CLAUDE.md`** — replace the placeholder comments with your project's conventions.
+**2. Rename template files:**
 
-**3. Edit `.claude/rules/`** — adapt the example rules to your tech stack. Each rule file has a `globs:` header that controls when it loads.
+```bash
+mv your-project/local/backlog-TEMPLATE.md your-project/local/backlog.md
+mv your-project/local/session-notes/TEMPLATE.md your-project/local/session-notes/README.md
+```
 
-**4. Start a Claude Code session.** Everything works automatically from here.
+**3. Edit `CLAUDE.md`** — replace the placeholder comments with your project's conventions.
+
+**4. Edit `.claude/rules/`** — adapt the example rules to your tech stack. Each rule file has a `globs:` header that controls when it loads.
+
+**5. Start a Claude Code session.** Everything works automatically from here.
 
 That's it. The memory system, handover hook, and rules loading are all pre-configured.
 

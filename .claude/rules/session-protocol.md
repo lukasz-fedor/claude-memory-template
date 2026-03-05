@@ -38,7 +38,7 @@ Claude maintains session notes in `local/session-notes/YYYY-MM-DD.md`:
 
 ## Backlog
 
-`local/backlog.md` tracks tasks between sessions. Update after completing tasks — check off done items, add new ones discovered during work.
+`local/backlog.md` tracks tasks between sessions. Update after completing tasks — check off done items, add new ones discovered during work. (Rename `backlog-TEMPLATE.md` to `backlog.md` on first use.)
 
 ## Handover
 
