@@ -1,111 +1,53 @@
 # Claude Code Memory Template
 
-A starter template for organizing Claude Code's memory system: modular rules, persistent memory, session continuity, and automatic handover.
+A ready-to-use system that makes Claude Code remember your project across sessions — rules, preferences, decisions, and context.
 
-## Why this exists
+## The problem
 
-Claude Code loads `CLAUDE.md` into every conversation. As your project grows, this file bloats — and Claude wastes context on instructions irrelevant to the current task.
+Every new Claude Code session starts from zero. Claude doesn't remember what you decided yesterday, what bugs you fixed, or how your project is structured. You end up repeating yourself, correcting the same mistakes, and losing time.
 
-This template solves that with **three layers**:
+## What this template gives you
 
-| Layer | What it does | When it loads |
-|-------|-------------|---------------|
-| `CLAUDE.md` | Core project identity and conventions | Every session |
-| `.claude/rules/` | Domain-specific rules with glob patterns | Only when editing matching files |
-| `MEMORY.md` | Persistent knowledge across sessions | Every session (auto-managed by Claude Code) |
+| What | How it helps |
+|------|-------------|
+| **Modular rules** | Claude loads only relevant instructions — not everything at once |
+| **Persistent memory** | Decisions, bug fixes, and gotchas survive across sessions |
+| **Session handover** | When Claude runs out of context mid-conversation, it saves a handover file so the next session picks up where you left off |
+| **Skills** | Reusable "modes" that make Claude an expert at specific tasks (code review, copywriting, deployment...) |
+| **Anti-hallucination** | Built-in rules that stop Claude from making up facts, stats, or URLs |
 
-## How it works
+## How it's organized
 
-### 1. CLAUDE.md — lean and focused
-
-Keep it under 100 lines. Only project-wide conventions that apply to every task. Move everything else to rules.
-
-**Key sections included in the template:**
-- Session Continuity — handover reading at session start
-- Work Conventions — placeholder rules, human-in-the-loop
-- Anti-Hallucination Protocol — prevents fabricated facts, stats, URLs
-- Git Workflow — conventional commits
-- Productivity Tips — "update CLAUDE.md" habit, subagents, plan mode
-
-### 2. Rules with glob patterns
-
-Files in `.claude/rules/` have frontmatter that controls when they load:
-
-```yaml
----
-globs:
-  - "src/**"
----
+```
+your-project/
+├── CLAUDE.md                    # Project rules (always loaded, keep it short)
+├── .claude/
+│   ├── rules/                   # Detailed rules — loaded only when relevant
+│   │   ├── architecture.md      #   → loads when editing src/ files
+│   │   ├── workflow.md          #   → loads when editing docs/ or scripts/
+│   │   └── session-protocol.md  #   → loads when editing local/ files
+│   ├── skills/                  # Specialized modes for specific tasks
+│   │   └── example-skill/       #   → copy and adapt for your needs
+│   │       ├── SKILL.md         #     instructions for this skill
+│   │       ├── LEARNED.md       #     patterns Claude discovers over time
+│   │       └── references/      #     supporting docs
+│   ├── hooks/
+│   │   └── pre-compact-handover.py  # Auto-saves context before it's lost
+│   └── settings.json            # Hook configuration
+├── local/                       # Your working notes (gitignored)
+│   ├── backlog.md               #   task tracking between sessions
+│   └── session-notes/           #   daily notes + auto-generated handovers
+├── .claudeignore                # What Claude skips at startup
+└── .gitignore                   # Keeps local/ and .env out of git
 ```
 
-This rule loads only when Claude edits files in `src/`. Architecture docs, styling gotchas, component conventions — all loaded contextually instead of always.
-
-**Included examples:**
-- `architecture.md` (glob: `src/**`) — tech stack, components, styling
-- `workflow.md` (glob: `docs/**`, `scripts/**`) — documentation and tooling
-- `session-protocol.md` (glob: `local/**`) — session notes format
-
-### 3. Persistent memory
-
-> **You don't create this folder in your project.** Claude Code manages memory automatically at `~/.claude/projects/<project-hash>/memory/`. The `memory/` folder in this template repo contains **examples only** — to show you what Claude Code creates and how to structure it. See `memory/README.md` for details.
-
-**Where memory actually lives:**
-```
-~/.claude/projects/<project-hash>/memory/
-├── MEMORY.md          ← always loaded (keep under 200 lines)
-├── debugging.md       ← topic file (loaded on demand)
-└── patterns.md        ← topic file (loaded on demand)
-```
-
-Claude Code creates `MEMORY.md` on its own. You can also create **topic files** in the same directory to keep MEMORY.md lean — Claude will reference them from the main index.
-
-**What to save:** Stable patterns, architectural decisions, user preferences, recurring solutions.
-**What NOT to save:** Session-specific context, unverified conclusions, anything that duplicates CLAUDE.md.
-
-### 4. Skills
-
-Skills are specialized "modes" for Claude Code. Each skill gives Claude domain expertise, workflows, and guardrails for a specific type of task (e.g., code review, copywriting, SEO audit, deployment).
-
-**Skill structure:**
-```
-.claude/skills/your-skill/
-├── SKILL.md               ← main instructions (loaded when skill is invoked)
-├── LEARNED.md             ← patterns discovered during real usage
-└── references/            ← domain knowledge files (loaded on demand)
-```
-
-The template includes an annotated `example-skill/` — copy it and adapt to your needs. Skills are configured in your project's `.claude/settings.json` or invoked via slash commands.
-
-**How skills improve over time:** Claude updates `LEARNED.md` proactively after solving non-trivial problems. Next time the skill runs, Claude reads those patterns first — so skills get better with each session.
-
-### 5. Session continuity
-
-The **PreCompact hook** solves Claude Code's biggest limitation: context loss.
-
-When Claude Code runs out of context and compresses the conversation, the hook:
-1. Reads the full conversation transcript
-2. Generates a structured HANDOVER document via `claude -p` (tools disabled, single turn)
-3. Saves it to `local/session-notes/HANDOVER-latest.md`
-
-Next session, Claude reads the handover and picks up where it left off.
-
-**Setup:** The hook is configured in `.claude/settings.json` and runs automatically.
-
-### 6. .claudeignore
-
-Controls what Claude Code auto-loads at session start. Does **not** block search tools (Glob, Grep) — those can still scan ignored directories unless you pass the `path` parameter explicitly.
+The key idea: **CLAUDE.md stays short** (under 100 lines). Detailed instructions go into `rules/` files that load automatically based on what files you're editing.
 
 ## Quick start
 
-1. Copy this template into your project root
-2. Edit `CLAUDE.md` — replace placeholders with your project info
-3. Edit `.claude/rules/` — adapt rules to your tech stack
-4. Copy `.claude/skills/example-skill/` and adapt to your domain
-5. Verify `.claude/settings.json` has the PreCompact hook
-6. Start a Claude Code session — the system works automatically
+**1. Copy the template into your project:**
 
 ```bash
-# Copy template files (local/session-notes/ is included with TEMPLATE.md)
 cp -r claude-memory-template/.claude your-project/.claude
 cp -r claude-memory-template/local your-project/local
 cp claude-memory-template/CLAUDE.md your-project/CLAUDE.md
@@ -113,45 +55,74 @@ cp claude-memory-template/.claudeignore your-project/.claudeignore
 cat claude-memory-template/.gitignore >> your-project/.gitignore
 ```
 
-## File structure
+**2. Edit `CLAUDE.md`** — replace the placeholder comments with your project's conventions.
 
+**3. Edit `.claude/rules/`** — adapt the example rules to your tech stack. Each rule file has a `globs:` header that controls when it loads.
+
+**4. Start a Claude Code session.** Everything works automatically from here.
+
+That's it. The memory system, handover hook, and rules loading are all pre-configured.
+
+## How each piece works
+
+### Rules (load only when needed)
+
+Instead of cramming everything into CLAUDE.md, put detailed instructions in `.claude/rules/`. Each file has a header that tells Claude when to load it:
+
+```yaml
+---
+globs:
+  - "src/**"
+---
+# Architecture rules here...
 ```
-your-project/
-├── CLAUDE.md                          # Core instructions (always loaded)
-├── .claudeignore                      # Auto-load exclusions
-├── .gitignore                         # Includes local/ and .env
-├── .claude/
-│   ├── settings.json                  # Hook configuration
-│   ├── rules/
-│   │   ├── architecture.md            # Loads for src/** edits
-│   │   ├── workflow.md                # Loads for docs/**, scripts/**
-│   │   └── session-protocol.md        # Loads for local/** edits
-│   ├── skills/
-│   │   └── example-skill/             # Example skill (replace with your own)
-│   │       ├── SKILL.md               # Skill instructions (loaded on invoke)
-│   │       ├── LEARNED.md             # Patterns discovered during usage
-│   │       └── references/            # Domain knowledge files
-│   └── hooks/
-│       └── pre-compact-handover.py    # Auto-generates handover on compact
-├── local/                             # Gitignored — local working data
-│   ├── backlog.md                     # Task tracking between sessions
-│   └── session-notes/
-│       ├── HANDOVER-latest.md         # Auto-generated by hook
-│       └── 2025-01-15.md              # Daily session notes
-└── memory/                            # EXAMPLES ONLY — not part of your project
-    ├── README.md                      # How Claude Code memory works
-    ├── example-memory.md              # What MEMORY.md looks like
-    └── example-topic.md               # What a topic file looks like
-```
+
+This file loads only when Claude edits something in `src/`. Your styling guide, component conventions, API patterns — all loaded contextually, not always.
+
+### Memory (persists across sessions)
+
+Claude Code has a built-in memory system at `~/.claude/projects/`. You don't need to create it — Claude manages it automatically.
+
+This template teaches Claude **how** to use memory well:
+- Write entries immediately when discovering something useful (don't wait)
+- Use the format: `2026-03-05: what happened — why it matters`
+- Organize into topic files (`tools/docker.md`, `domain/auth.md`)
+- Keep the index (`MEMORY.md`) short — one line per topic file
+
+> The `memory/` folder in this repo contains **examples only**. It shows what Claude creates on its own — it's not part of your project files.
+
+### Skills (specialized modes)
+
+Skills give Claude domain expertise for specific tasks. Each skill has:
+- **SKILL.md** — instructions loaded when the skill is invoked
+- **LEARNED.md** — patterns Claude discovers during real usage (gets better over time)
+- **references/** — supporting documentation loaded on demand
+
+The template includes an annotated `example-skill/` to copy and adapt.
+
+### Session handover (automatic)
+
+When Claude Code runs out of context and compresses the conversation, the pre-configured hook:
+1. Reads the full conversation
+2. Generates a structured handover document
+3. Saves it to `local/session-notes/HANDOVER-latest.md`
+
+Next session, Claude reads the handover and continues where it left off. No manual work needed.
+
+### .claudeignore (control what loads)
+
+Works like `.gitignore` — tells Claude Code what to skip when starting a session. Useful for large directories (build output, node_modules, big data files) that would waste context.
+
+Note: `.claudeignore` only affects auto-loading at startup. Claude's search tools (Glob, Grep) can still find files in ignored directories when needed.
 
 ## Design principles
 
-1. **Context is finite.** Every line Claude reads costs tokens. Load only what's relevant.
-2. **Rules over memory.** Rules are structured and scoped. Memory is freeform. Prefer rules for stable conventions.
-3. **Session continuity matters.** The handover hook means no work is lost when context compresses.
-4. **Modular beats monolithic.** A 200-line CLAUDE.md with everything is worse than 50 lines + 3 focused rules.
-5. **Human-in-the-loop.** Never auto-publish, auto-approve, or auto-save without explicit OK.
-6. **Anti-hallucination by default.** Claude should cite sources, admit ignorance, and verify links.
+1. **Context is expensive.** Every line Claude reads costs tokens. Load only what's relevant.
+2. **Modular beats monolithic.** 50 lines in CLAUDE.md + 3 focused rules > 200 lines in one file.
+3. **Rules over memory.** Rules are structured and always apply. Memory is for discoveries and edge cases.
+4. **No work lost.** The handover hook means context compression doesn't erase progress.
+5. **Human-in-the-loop.** Claude never auto-publishes, auto-approves, or auto-deploys without your OK.
+6. **No hallucinations.** Claude cites sources, admits when it doesn't know, and verifies before claiming.
 
 ## Requirements
 
