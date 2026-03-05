@@ -34,6 +34,9 @@ your-project/
 │   ├── hooks/
 │   │   └── pre-compact-handover.py  # Auto-saves context before it's lost
 │   └── settings.json            # Hook configuration
+├── memory/                      # Example (Claude creates this automatically)
+│   ├── MEMORY.md                #   topic index
+│   └── example-topic.md         #   notes per topic
 ├── local/                       # Your working notes (gitignored)
 │   ├── backlog.md               #   task tracking between sessions
 │   └── session-notes/           #   daily notes + auto-generated handovers
